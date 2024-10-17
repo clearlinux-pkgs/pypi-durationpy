@@ -6,13 +6,14 @@
 # autospec commit: f35655a
 #
 Name     : pypi-durationpy
-Version  : 0.7
-Release  : 1
-URL      : https://files.pythonhosted.org/packages/8b/b8/074abdcc251bec87da6c5b19b88d7898ec7996c6780d40c6ac5000d3dd47/durationpy-0.7.tar.gz
-Source0  : https://files.pythonhosted.org/packages/8b/b8/074abdcc251bec87da6c5b19b88d7898ec7996c6780d40c6ac5000d3dd47/durationpy-0.7.tar.gz
+Version  : 0.9
+Release  : 2
+URL      : https://files.pythonhosted.org/packages/31/e9/f49c4e7fccb77fa5c43c2480e09a857a78b41e7331a75e128ed5df45c56b/durationpy-0.9.tar.gz
+Source0  : https://files.pythonhosted.org/packages/31/e9/f49c4e7fccb77fa5c43c2480e09a857a78b41e7331a75e128ed5df45c56b/durationpy-0.9.tar.gz
 Summary  : Module for converting between datetime.timedelta and Go's Duration strings.
 Group    : Development/Tools
 License  : MIT
+Requires: pypi-durationpy-license = %{version}-%{release}
 Requires: pypi-durationpy-python = %{version}-%{release}
 Requires: pypi-durationpy-python3 = %{version}-%{release}
 BuildRequires : buildreq-distutils3
@@ -23,6 +24,14 @@ BuildRequires : buildreq-distutils3
 %description
 # durationpy
 > Module for converting between `datetime.timedelta` and Go's Duration strings.
+
+%package license
+Summary: license components for the pypi-durationpy package.
+Group: Default
+
+%description license
+license components for the pypi-durationpy package.
+
 
 %package python
 Summary: python components for the pypi-durationpy package.
@@ -44,15 +53,15 @@ python3 components for the pypi-durationpy package.
 
 
 %prep
-%setup -q -n durationpy-0.7
-cd %{_builddir}/durationpy-0.7
+%setup -q -n durationpy-0.9
+cd %{_builddir}/durationpy-0.9
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1726863081
+export SOURCE_DATE_EPOCH=1729123260
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -87,6 +96,8 @@ ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
 export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/pypi-durationpy
+cp %{_builddir}/durationpy-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/pypi-durationpy/d793421c724a8974cec8b62dad104f3a64e47e52 || :
 python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -94,6 +105,10 @@ echo ----[ mark ]----
 
 %files
 %defattr(-,root,root,-)
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/pypi-durationpy/d793421c724a8974cec8b62dad104f3a64e47e52
 
 %files python
 %defattr(-,root,root,-)
